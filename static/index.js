@@ -263,7 +263,7 @@ function Line(i) {
         .attr("stroke", colors)
         .attr("stroke-width", "2px");
 
-    svg.selectAll(".circle")
+    var circle = svg.selectAll(".circle")
         .data(dataset)
         .enter()
         .append("circle")
@@ -282,6 +282,12 @@ function Line(i) {
         .attr("fill", "white")
         .attr("stroke", colors)
         .attr("stroke-width", "2px")
+        .on("mouseover",function (d,i) {
+            d3.select(this)
+                .attr("r",15)
+        })
+        .on("mouseout",function (d,i) {
+        })
 }
 
 d3.json(/was/, function (error, jsondata) {
