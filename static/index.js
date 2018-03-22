@@ -67,7 +67,8 @@ function GetPlayerName(jsondata) {
             $(this).css("background-color", Player_css(this));
             $(".name").not(this).css("color", "black");
             $(".name").not(this).css("background-color", "white");
-            Rect();
+            Rect(this);
+            Line();
             updata_rect(this)
         })
 }
@@ -142,24 +143,24 @@ function Player_massage(i) {
 function updata_rect(i) {
     var datasets = [i.__data__.ast_16[0], i.__data__.blk_16[0], i.__data__.psg_16[0], i.__data__.stl_16[0], i.__data__.trb_16[0]];
     d3.selectAll(".rects")
-        .data(datasets)
         .transition()
         .duration(500)
         .ease("linear")
-        .attr("height",function (d,i) {
-            return datasets[i]*2+5
+        .attr("height", function (d, i) {
+            return datasets[i] * 2 + 5
         })
 }
 
-function Rect() {
+function Rect(i) {
     var xScale = d3.scale.ordinal()
         .domain([0, 1, 2, 3, 4])
         .rangeRoundBands([0, 550]);
     var datasets = [1, 1, 1, 1, 1];
+    var dataset = [i.__data__, i.__data__, i.__data__, i.__data__, i.__data__];
     var name = ["场均助攻数", "场均盖帽数", "场均得分", "场均抢断数", "场均篮板球数"];
     var Rect = d3.select(".rect_svg");
     Rect.selectAll(".rects")
-        .data(datasets)
+        .data(dataset)
         .enter()
         .append("rect")
         .attr("class", "rects")
@@ -174,8 +175,9 @@ function Rect() {
         .attr("height", function (d, i) {
             return datasets[i] * 2 + 5
         })
-        .on("click",function () {
-            console.log(this)
+        .on("click", function () {
+            console.log(this);
+            updata_line(this)
         });
 
     Rect.selectAll(".text1")
@@ -195,6 +197,7 @@ function Rect() {
 }
 
 function updata_line(i) {
+    $(".ytext").remove();
     switch (i.attributes.fill.value) {
         case color[0]:
             dataset = [i.__data__.ast_12[0], i.__data__.ast_13[0], i.__data__.ast_14[0], i.__data__.ast_15[0], i.__data__.ast_16[0]];
@@ -222,11 +225,68 @@ function updata_line(i) {
             colors = color[4];
             break;
     }
+
+    var y = d3.scale.linear()
+        .domain([0, d3.max(dataset, function (d) {
+            return d;
+        })])
+        .range([height - 30, 0]);
+
+    var x = d3.scale.ordinal()
+        .domain([2013, 2014, 2015, 2016, 2017])
+        .rangeRoundBands([0, width - 30]);
+
+    var yAxis = d3.svg.axis()
+        .scale(y)
+        .orient("left");
+
+    var line = d3.svg.line()
+        .x(function (d, i) {
+            return x(i + 2013);
+        })
+        .y(function (d) {
+            return y(d);
+        });
+
+    d3.select(".yaxis")
+        .transition()
+        .duration(500)
+        .ease("linear")
+        .call(yAxis);
+
+    d3.selectAll(".line_circle")
+        .data(dataset)
+        .transition()
+        .duration(500)
+        .ease("linear")
+        .attr("cx", function (d, i) {
+            return x(i + 2013);
+        })
+        .attr("cy", function (d) {
+            return y(d)
+        })
+        .attr("stroke", colors);
+
+    d3.select(".line_path")
+        .transition()
+        .duration(500)
+        .ease("linear")
+        .attr("d", line(dataset))
+        .attr("stroke", colors);
+
+    d3.select(".yaxis")
+        .append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 17)
+        .attr("class","ytext")
+        .style("text-anchor", "end")
+        .text(tag)
 }
 
 function Line() {
+    $(".yaxis").remove();
     var svg = d3.select(".line_svg");
-    var dataset = [0,0,0,0,0];
+    var dataset = [5, 5, 5, 5, 5];
 
     console.log(dataset);
 
@@ -249,7 +309,7 @@ function Line() {
         .orient("left");
 
     var gxAxis = svg.append("g")
-        .attr("class", "axis")
+        .attr("class", "xaxis")
         .attr("transform", "translate(40,400)")
         .call(xAxis)
         .append("text")
@@ -259,14 +319,9 @@ function Line() {
         .text("年份");
 
     var gyAxis = svg.append("g")
-        .attr("class", "axis")
+        .attr("class", "yaxis")
         .attr("transform", "translate(40,30)")
-        .call(yAxis)
-        .append("text")
-        .attr("transform", "rotate(-90)")
-        .attr("y", 17)
-        .style("text-anchor", "end")
-        .text(tag);
+        .call(yAxis);
 
     var line = d3.svg.line()
         .x(function (d, i) {
@@ -278,23 +333,17 @@ function Line() {
 
     svg.append("path")
         .attr("class", "line_path")
-        .transition()
-        // .duration(1000)
-        // .ease("linear")
-        .attr("d", line(dataset))
+        // .attr("d", line(dataset))
         .attr("transform", "translate(40,30)")
         .attr("fill", "none")
-        .attr("stroke", black)
+        .attr("stroke", "black")
         .attr("stroke-width", "2px");
 
-    var circle = svg.selectAll(".circle")
+    var circle = svg.selectAll(".line_circle")
         .data(dataset)
         .enter()
         .append("circle")
         .attr("r", 5)
-        .transition()
-        // .duration(1000)
-        // .ease("linear")
         .attr("cx", function (d, i) {
             return x(i + 2013);
         })
@@ -304,7 +353,7 @@ function Line() {
         .attr("class", "line_circle")
         .attr("transform", "translate(40,30)")
         .attr("fill", "white")
-        .attr("stroke", colors)
+        .attr("stroke", "white")
         .attr("stroke-width", "2px")
 }
 

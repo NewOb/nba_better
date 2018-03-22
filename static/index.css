@@ -90,8 +90,9 @@ h3 {
 #rect{
     float: left;
 }
-.axis path,
-.axis line{
+.xaxis path,
+.xaxis line,.yaxis path,
+.yaxis line{
     fill: none;
     stroke: black;
     shape-rendering: crispEdges;
