@@ -67,7 +67,8 @@ function GetPlayerName(jsondata) {
             $(this).css("background-color", Player_css(this));
             $(".name").not(this).css("color", "black");
             $(".name").not(this).css("background-color", "white");
-            Rect(this);
+            Rect();
+            updata_rect(this)
         })
 }
 
@@ -138,13 +139,22 @@ function Player_massage(i) {
 
 }
 
-function Rect(i) {
-    // $(".rects").remove();
+function updata_rect(i) {
+    var datasets = [i.__data__.ast_16[0], i.__data__.blk_16[0], i.__data__.psg_16[0], i.__data__.stl_16[0], i.__data__.trb_16[0]];
+    d3.selectAll(".rects")
+        .data(datasets)
+        .transition()
+        .duration(500)
+        .ease("linear")
+        .attr("height",function (d,i) {
+            return datasets[i]*2+5
+        })
+}
+
+function Rect() {
     var xScale = d3.scale.ordinal()
         .domain([0, 1, 2, 3, 4])
         .rangeRoundBands([0, 550]);
-    // var dataset = [i.__data__, i.__data__, i.__data__, i.__data__, i.__data__];
-    // var datasets = [i.__data__.ast_16[0], i.__data__.blk_16[0], i.__data__.psg_16[0], i.__data__.stl_16[0], i.__data__.trb_16[0]];
     var datasets = [1, 1, 1, 1, 1];
     var name = ["场均助攻数", "场均盖帽数", "场均得分", "场均抢断数", "场均篮板球数"];
     var Rect = d3.select(".rect_svg");
@@ -164,8 +174,8 @@ function Rect(i) {
         .attr("height", function (d, i) {
             return datasets[i] * 2 + 5
         })
-        .on("mouseover", function () {
-            Line(this)
+        .on("click",function () {
+            console.log(this)
         });
 
     Rect.selectAll(".text1")
@@ -184,10 +194,7 @@ function Rect(i) {
 
 }
 
-function Line(i) {
-    $(".axis").remove();
-    $(".line_path").remove();
-    $(".line_circle").remove();
+function updata_line(i) {
     switch (i.attributes.fill.value) {
         case color[0]:
             dataset = [i.__data__.ast_12[0], i.__data__.ast_13[0], i.__data__.ast_14[0], i.__data__.ast_15[0], i.__data__.ast_16[0]];
@@ -215,7 +222,11 @@ function Line(i) {
             colors = color[4];
             break;
     }
+}
+
+function Line() {
     var svg = d3.select(".line_svg");
+    var dataset = [0,0,0,0,0];
 
     console.log(dataset);
 
@@ -273,7 +284,7 @@ function Line(i) {
         .attr("d", line(dataset))
         .attr("transform", "translate(40,30)")
         .attr("fill", "none")
-        .attr("stroke", colors)
+        .attr("stroke", black)
         .attr("stroke-width", "2px");
 
     var circle = svg.selectAll(".circle")
@@ -295,12 +306,6 @@ function Line(i) {
         .attr("fill", "white")
         .attr("stroke", colors)
         .attr("stroke-width", "2px")
-        .on("mouseover", function (d, i) {
-            d3.select(this)
-                .attr("r", 15)
-        })
-        .on("mouseout", function (d, i) {
-        })
 }
 
 d3.selectAll(".nba")
