@@ -103,27 +103,69 @@ function Player_css(i) {
 function sort_name(jsondata, q) {
     if (q == "效率值") {
         sort_mvp(jsondata);
-        GetPlayerName(jsondata)
+        d3.selectAll(".name")
+            .data(jsondata)
+            .transition()
+            .duration(200)
+            .ease("linear")
+            .text(function (d) {
+            return d.player
+        });
     }
     else if (q == "场均得分") {
         sort_psg(jsondata);
-        GetPlayerName(jsondata)
+        d3.selectAll(".name")
+            .data(jsondata)
+            .transition()
+            .duration(200)
+            .ease("linear")
+            .text(function (d) {
+            return d.player
+        });
     }
     else if (q == "场均盖帽") {
         sort_blk(jsondata);
-        GetPlayerName(jsondata)
+        d3.selectAll(".name")
+            .data(jsondata)
+            .transition()
+            .duration(200)
+            .ease("linear")
+            .text(function (d) {
+            return d.player
+        });
     }
     else if (q == "场均抢断") {
         sort_stl(jsondata);
-        GetPlayerName(jsondata)
+        d3.selectAll(".name")
+            .data(jsondata)
+            .transition()
+            .duration(200)
+            .ease("linear")
+            .text(function (d) {
+            return d.player
+        });
     }
     else if (q == "场均篮板") {
         sort_trb(jsondata);
-        GetPlayerName(jsondata)
+        d3.selectAll(".name")
+            .data(jsondata)
+            .transition()
+            .duration(200)
+            .ease("linear")
+            .text(function (d) {
+            return d.player
+        });
     }
     else if (q == "场均助攻") {
         sort_ast(jsondata);
-        GetPlayerName(jsondata)
+        d3.selectAll(".name")
+            .data(jsondata)
+            .transition()
+            .duration(200)
+            .ease("linear")
+            .text(function (d) {
+            return d.player
+        });
     }
 }
 
@@ -355,6 +397,20 @@ function Line() {
         .attr("fill", "white")
         .attr("stroke", "white")
         .attr("stroke-width", "2px")
+        .on("mouseover",function () {
+            d3.select(this)
+                .transition()
+                .duration(200)
+                .ease("linear")
+                .attr("r",10)
+        })
+        .on("mouseout",function () {
+            d3.select(this)
+                .transition()
+                .duration(200)
+                .ease("linear")
+                .attr("r",5)
+        })
 }
 
 d3.selectAll(".nba")
