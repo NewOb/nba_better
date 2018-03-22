@@ -59,7 +59,16 @@ function GetPlayerName(jsondata) {
         .attr("class", "name")
         .text(function (d) {
             return d.player
-        });
+        })
+        .on("click", function () {
+            console.log(this);
+            Player_massage(this);
+            $(this).css("color", "white");
+            $(this).css("background-color", Player_css(this));
+            $(".name").not(this).css("color", "black");
+            $(".name").not(this).css("background-color", "white");
+            Rect(this);
+        })
 }
 
 function sort_psg(jsondata) {
@@ -130,16 +139,17 @@ function Player_massage(i) {
 }
 
 function Rect(i) {
-    $(".rects").remove();
+    // $(".rects").remove();
     var xScale = d3.scale.ordinal()
         .domain([0, 1, 2, 3, 4])
         .rangeRoundBands([0, 550]);
-    var dataset = [i.__data__, i.__data__, i.__data__, i.__data__, i.__data__];
-    var datasets = [i.__data__.ast_16[0], i.__data__.blk_16[0], i.__data__.psg_16[0], i.__data__.stl_16[0], i.__data__.trb_16[0]];
+    // var dataset = [i.__data__, i.__data__, i.__data__, i.__data__, i.__data__];
+    // var datasets = [i.__data__.ast_16[0], i.__data__.blk_16[0], i.__data__.psg_16[0], i.__data__.stl_16[0], i.__data__.trb_16[0]];
+    var datasets = [1, 1, 1, 1, 1];
     var name = ["场均助攻数", "场均盖帽数", "场均得分", "场均抢断数", "场均篮板球数"];
     var Rect = d3.select(".rect_svg");
     Rect.selectAll(".rects")
-        .data(dataset)
+        .data(datasets)
         .enter()
         .append("rect")
         .attr("class", "rects")
@@ -153,6 +163,9 @@ function Rect(i) {
         .attr("width", 85)
         .attr("height", function (d, i) {
             return datasets[i] * 2 + 5
+        })
+        .on("mouseover", function () {
+            Line(this)
         });
 
     Rect.selectAll(".text1")
@@ -282,58 +295,39 @@ function Line(i) {
         .attr("fill", "white")
         .attr("stroke", colors)
         .attr("stroke-width", "2px")
-        .on("mouseover",function (d,i) {
+        .on("mouseover", function (d, i) {
             d3.select(this)
-                .attr("r",15)
+                .attr("r", 15)
         })
-        .on("mouseout",function (d,i) {
+        .on("mouseout", function (d, i) {
         })
 }
 
-d3.json(/was/, function (error, jsondata) {
-    if (error)
-        console.log(error);
-    console.log(jsondata);
-    $("#was").click(function () {
-        $("#was").css("background-color", "dodgerblue");
-        $("#was").css("color", "white");
-        $(".nba").not(this).css("background-color", "white");
-        $(".nba").not(this).css("color", "black");
-        sort_mvp(jsondata);
-        GetPlayerName(jsondata);
-        $(".sort:first").css("background-color", color[5]);
-        $(".sort:first").css("color", "white");
-        GetLogo("http://mat1.gtimg.com/sports/nba/logo/1602/27.png");
-        $(".sort").click(function () {
-            $(this).css("background-color", sort_css(this));
-            $(this).css("color", "white");
-            $(".sort").not(this).css("background-color", "white");
-            $(".sort").not(this).css("color", "black");
-            sort_name(jsondata, this.innerText);
-            $(".name").click(function () {
-                $(this).css("background-color", Player_css(this));
-                $(this).css("color", "white");
-                $(".name").not(this).css("background-color", "white");
-                $(".name").not(this).css("color", "black");
-                Player_massage(this);
-                Rect(this);
-                $(".rects").click(function () {
-                    console.log(this);
-                    Line(this)
+d3.selectAll(".nba")
+    .on("click", function () {
+        console.log(this.innerText);
+        switch (this.innerText) {
+            case "华盛顿奇才":
+                d3.json(/was/, function (error, jsondata) {
+                    if (error)
+                        console.log(error);
+                    console.log(jsondata);
+                    d3.select("#was")
+                        .style("background-color", "dodgerblue")
+                        .style("color", "white");
+                    sort_mvp(jsondata);
+                    GetPlayerName(jsondata);
+                    $(".sort:first").css("background-color", color[5]);
+                    $(".sort:first").css("color", "white");
+                    GetLogo("http://mat1.gtimg.com/sports/nba/logo/1602/27.png");
+                    d3.selectAll(".sort")
+                        .on("click", function () {
+                            $(this).css("color", "white");
+                            $(this).css("background-color", sort_css(this));
+                            $(".sort").not(this).css("color", "black");
+                            $(".sort").not(this).css("background-color", "white");
+                            sort_name(jsondata, this.innerHTML)
+                        })
                 })
-            })
-        });
-        $(".name").click(function () {
-            $(this).css("background-color", Player_css(this));
-            $(this).css("color", "white");
-            $(".name").not(this).css("background-color", "white");
-            $(".name").not(this).css("color", "black");
-            Player_massage(this);
-            Rect(this);
-            $(".rects").click(function () {
-                console.log(this);
-                Line(this)
-            })
-        });
+        }
     });
-});
