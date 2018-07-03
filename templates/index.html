@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>NBA球员分析</title>
+        <link rel="stylesheet" href="{{ url_for('static',filename = 'index.css') }}">
+	</head>
+	<body>
+
+		<div id="top">
+            <div id="logo"></div>
+            <div id="team">
+                <ul>
+                <li id="was" class="nba">华盛顿奇才</li>
+                <li id="cho" class="nba">夏洛特黄蜂</li>
+                <li id="atl" class="nba">亚特兰大老鹰</li>
+                <li id="mia" class="nba">迈阿密热火</li>
+                <li id="orl" class="nba">奥兰多魔术</li>
+                <li id="nyk" class="nba">纽约尼克斯</li>
+                <li id="phi" class="nba">费城76人</li>
+                <li id="bkn" class="nba">布鲁克林篮网</li>
+                <li id="bos" class="nba">波士顿凯尔特人</li>
+                <li id="tor" class="nba">多伦多猛龙</li>
+                <li id="chi" class="nba">芝加哥公牛</li>
+                <li id="cle" class="nba">克里夫兰骑士</li>
+                <li id="ind" class="nba">印第安纳步行者</li>
+                <li id="det" class="nba">底特律活塞</li>
+                <li id="mil" class="nba">密尔沃基雄鹿</li>
+                <li id="min" class="nba">明尼苏达森林狼</li>
+                <li id="uta" class="nba">犹他爵士</li>
+                <li id="okc" class="nba">俄克拉荷马雷霆</li>
+                <li id="por" class="nba">波兰特开拓者</li>
+                <li id="ned" class="nba">丹佛掘金</li>
+                <li id="mem" class="nba">孟菲斯灰熊</li>
+                <li id="hou" class="nba">休斯顿火箭</li>
+                <li id="nop" class="nba">新奥尔良鹈鹕</li>
+                <li id="sas" class="nba">圣安东尼奥马刺</li>
+                <li id="dal" class="nba">达拉斯小牛</li>
+                <li id="gsw" class="nba">金州勇士</li>
+                <li id="lal" class="nba">洛杉矶湖人</li>
+                <li id="lac" class="nba">洛杉矶快船</li>
+                <li id="phx" class="nba">菲尼克斯太阳</li>
+                <li id="sac" class="nba">萨克拉门托国王</li>
+                </ul>
+            </div>
+        </div>
+        <div id="blank"></div>
+        <div id="player">
+            <h3>成员</h3>
+            <ul id="players"></ul>
+        </div>
+		<div id="content">
+            <div id="player_massage">
+                <p id="title"></p>
+                <p id="next_title"></p>
+            </div>
+            <div id="rect"></div>
+            <div id="line"></div>
+            <div id="pie"></div>
+		</div>
+        <div id="sort">
+            <h3>降序方式</h3>
+            <ul id="sort_way">
+                <li class="sort">效率值</li>
+                <li class="sort">场均得分</li>
+                <li class="sort">场均盖帽</li>
+                <li class="sort">场均抢断</li>
+                <li class="sort">场均篮板</li>
+                <li class="sort">场均助攻</li>
+            </ul>
+        </div>
+	</body>
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+	<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js"></script>
+    <script src="{{ url_for('static',filename = 'index.js') }}"></script>
+</html>
